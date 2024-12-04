@@ -16,7 +16,7 @@ module pong(
     wire [11:0] rgb_next;
     
     vga_controller vga(.clk(clk), .reset(w_reset), .video_on(w_vid_on),
-                       .hsync(hsync), .vsync(vsync), .p_tick(w_pixel), .x(w_x), .y(w_y));
+                       .hsync(hsync), .vsync(vsync), .p_pixel(w_pixel), .x(w_x), .y(w_y));
     pixel pix(.clk(clk), .reset(w_reset), .up(w_up), .down(w_down), 
                  .video_on(w_vid_on), .x(w_x), .y(w_y), .rgb(rgb_next));
     debouncer dbright(.clk(clk), .button(reset), .clean(w_reset));
