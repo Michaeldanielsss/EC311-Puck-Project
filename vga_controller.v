@@ -6,7 +6,7 @@ module vga_controller(
     output video_on,    
     output hsync,      
     output vsync,     
-    output p_tick,     
+    output p_pixel,     
     output [9:0] x,     
     output [9:0] y     
     );
@@ -94,6 +94,6 @@ module vga_controller(
     assign vsync  = v_sync_reg;
     assign x      = h_count_reg;
     assign y      = v_count_reg;
-    assign p_tick = w_25MHz;
+    assign p_pixel = w_25MHz;
             
 endmodule
