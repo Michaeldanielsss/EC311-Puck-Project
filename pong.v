@@ -2,12 +2,12 @@
 
 module pong(
     input clk,       
-    input reset,            // btnright
-    input up,               // btnup
-    input down,             // btndown
-    output hsync,           // to VGA port
-    output vsync,           // to VGA port
-    output [11:0] rgb       // to DAC, to VGA port
+    input reset,            
+    input up,               
+    input down,             
+    output hsync,           
+    output vsync,           
+    output [11:0] rgb       
     );
     
     wire w_reset, w_up, w_down, w_vid_on, w_pixel;
