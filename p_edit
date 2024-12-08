@@ -56,6 +56,7 @@ module pixel(
             y_delta_reg = 10'h002;
             endgame_counter = 0;
             collision_counter = 0;
+            reset_ball = 0;
         end  
         else begin                                 //If not reset, set positions, speeds, and counter to next logic
             y_paddle_reg = y_paddle_next;
@@ -72,10 +73,6 @@ module pixel(
         begin
             // Reset the ball position to the top-left corner (0,0)
 //            y_paddle_reg <= 0;
-            y_ball_reg <= 0;  // Place the ball at top-left corner
-            x_ball_reg <= 0;  // Place the ball at top-left corner
-            x_delta_reg <= 10'h002;   // Reset ball speed
-            y_delta_reg <= 10'h002;   // Reset ball speed
             collision_counter <= 0; 
             end*/
                
@@ -138,7 +135,11 @@ module pixel(
         x_delta_next = x_delta_reg;
         y_delta_next = y_delta_reg;
 
-        if(y_ball_t < 1)                                            // collide with top
+        if(x_paddle_R <= x_ball_r)                                  // collides with right screen
+            reset_ball = 1;                                         // reset prop positions
+            x_delta_next <= 10'h002;                                // reset ball velocity
+            y_delta_next <= 10'h002;                                // reset ball velocity
+        else if(y_ball_t < 1)                                       // collide with top
             y_delta_next = ball_velocity_pos;                       // move down     
         else if(y_ball_b > y_MAX)                                   // collide with bottom
             y_delta_next = ball_velocity_neg;                       // move up         
@@ -148,13 +149,11 @@ module pixel(
             x_delta_next = ball_velocity_neg;                       // move left
             collision_counter = collision_counter + 1;              // count the collision    
         end      
-        else if(x_paddle_R <= x_ball_r) begin                       // collides with right screen
-            reset_ball = 1;
     end
 
     //Set Next Ball Properties
-    assign x_ball_next = (refresh_tick) ? x_ball_reg + x_delta_reg : x_ball_reg;
-    assign y_ball_next = (refresh_tick) ? y_ball_reg + y_delta_reg : y_ball_reg;
+    assign x_ball_next = (refresh_tick) ? ((reset_ball) ? 0 : x_ball_reg + x_delta_reg) : x_ball_reg;
+    assign y_ball_next = (refresh_tick) ? ((reset_ball) ? 0 : y_ball_reg + y_delta_reg) : y_ball_reg;
     ///////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////PADDLE PROPERTIES////////////////////////////////////////////
