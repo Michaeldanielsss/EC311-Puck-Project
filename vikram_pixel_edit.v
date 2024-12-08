@@ -62,22 +62,6 @@ module pixel(
         end
     end
     ///////////////////////////////////////////////////////////////////////////////////////////
-               
-
-        
-        
-        /*else begin
-            if (collision_counter >= 5) 
-            begin
-        // Increase speed after 15 collisions
-            ball_velocity_pos <= ball_velocity_pos + 20;// Increase speed
-            ball_velocity_neg <= -(ball_velocity_pos); // Decrease negative velocity to match
-
-            x_delta_reg <= x_delta_reg + 10'h002; // Increase speed by 1 (to simulate 0.5 increment)
-            y_delta_reg <= y_delta_reg + 10'h002; // Increase speed by 1 (to simulate 0.5 increment)
-            end 
-   
-    */
 
     ///////////////////////////BALL PROPERTIES////////////////////////////////////////////////
     //Current Ball Properties
