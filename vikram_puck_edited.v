@@ -28,6 +28,6 @@ module puck(
             reg_rgb <= w_rgb;
             
     assign rgb = reg_rgb;
-    assign score <= w_score;
+    assign score = w_score;
     
 endmodule
