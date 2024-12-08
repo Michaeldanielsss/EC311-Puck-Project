@@ -103,9 +103,9 @@ module pixel(
             end
         end*/
 
-    ///////////////////////////BALL PROPERTIES//////////////////////////////////
+    ///////////////////////////BALL PROPERTIES/////////////////////////////////////////////
     //Current Ball Properties
-    assign x_ball_l = x_ball_reg;
+    assign x_ball_l = x_ball_reg;    
     assign y_ball_t = y_ball_reg;
     assign x_ball_r = x_ball_l + ball_size - 1;
     assign y_ball_b = y_ball_t + ball_size - 1;
@@ -131,7 +131,28 @@ module pixel(
 
     //Pixel Location in Ball Box
     assign ball_col = x[3:0] - x_ball_l[3:0];    // 4-bit column index
-    ////////////////////////////////////////////////////////////////////////////
+
+    //Update the Next Ball Properties
+    always @* begin
+        x_delta_next = x_delta_reg;
+        y_delta_next = y_delta_reg;
+
+        if(y_ball_t < 1)                                            // collide with top
+            y_delta_next = ball_velocity_pos;                       // move down     
+        else if(y_ball_b > y_MAX)                                   // collide with bottom
+            y_delta_next = ball_velocity_neg;                       // move up         
+        else if(x_ball_l <= x_wall_R)                               // collide with wall
+            x_delta_next = ball_velocity_pos;                       // move right     
+        else if((x_paddle_L <= x_ball_r) && (x_ball_r <= x_paddle_R) &&(y_paddle_t <= y_ball_b) && (y_ball_t <= y_paddle_b)) begin  // collide with paddle 
+            x_delta_next = ball_velocity_neg;                       // move left
+            collision_counter = collision_counter + 1;              // count the collision    
+        end                
+    end
+
+    //Set Next Ball Properties
+    assign x_ball_next = (refresh_tick) ? x_ball_reg + x_delta_reg : x_ball_reg;
+    assign y_ball_next = (refresh_tick) ? y_ball_reg + y_delta_reg : y_ball_reg;
+    ///////////////////////////////////////////////////////////////////////////////////////
 
     
     // paddle 
@@ -153,42 +174,7 @@ module pixel(
     assign y_ball_t = 100;
     assign x_ball_r = x_ball_l + ball_size - 1;
     assign y_ball_b = y_ball_t + ball_size - 1;
-    */
-
-    
-    // new ball position
-    assign x_ball_next = (refresh_tick) ? x_ball_reg + x_delta_reg : x_ball_reg;
-    assign y_ball_next = (refresh_tick) ? y_ball_reg + y_delta_reg : y_ball_reg;
-    
-    // change ball direction after collision
-    always @* begin
-        x_delta_next = x_delta_reg;
-        y_delta_next = y_delta_reg;
-        //if(endgame_counter == 300000000)
-            //reset_ball = 0;
-
-        if(y_ball_t < 1)                                            // collide with top
-            y_delta_next = ball_velocity_pos;                       // move down
-            
-        else if(y_ball_b > y_MAX)                                   // collide with bottom
-            y_delta_next = ball_velocity_neg;                       // move up
-            
-        else if(x_ball_l <= x_wall_R)                               // collide with wall
-            x_delta_next = ball_velocity_pos;                       // move right
-            
-        else if((x_paddle_L <= x_ball_r) && (x_ball_r <= x_paddle_R) &&(y_paddle_t <= y_ball_b) && (y_ball_t <= y_paddle_b))     // collide with paddle 
-            begin
-                x_delta_next = ball_velocity_neg;        
-                collision_counter = collision_counter + 1;
-               
-            end           
-
-         /*else if((x_ball_r <= x_paddle_L)&&(y_paddle_t <= y_ball_b) && (y_ball_t <= y_paddle_b))
-            begin
-                x_delta_next = ball_velocity_neg;        
-                collision_counter = collision_counter + 1;
-            end */       
-    end     
+    */   
 
     ///////////////////////LOGIC TO DETERMINE CURRENT PIXEL PROP/////////////////////
     //Wall Pixel?
