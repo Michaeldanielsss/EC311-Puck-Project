@@ -39,7 +39,7 @@ module pixel(
     wire ball_bit;                   // shows when rom data is 1 or 0 for ball rgb control
     wire wall_on, paddle_on, ball_craft, ball_on;
     reg reset_ball; // responsible for setting the ball when game over
-
+    reg [15:0] endgame_counter;
     ////////////////////////////LOGIC TO SET REGISTER PROPERTIES///////////////////////////////
     always @(posedge clk or posedge reset)begin
         if(reset) begin                            //If reset, set the positions, speeds and counters to zero
@@ -103,10 +103,12 @@ module pixel(
         
         //Change Pixel Velocity
         if(x_paddle_R <= x_ball_r)                                  // collides with right screen
+        begin
             reset_ball = 1;                                         // reset prop positions
             x_delta_next = 10'h002;                                 // reset ball velocity
             y_delta_next = 10'h002;                                 // reset ball velocity
             collision_counter = 0;                                  // reset collisions 
+        end
         else if(y_ball_t < 1)                                       // collide with top
             y_delta_next = ball_velocity_pos;                       // move down     
         else if(y_ball_b > y_MAX)                                   // collide with bottom
@@ -144,10 +146,10 @@ module pixel(
 
     ///////////////////////LOGIC TO DETERMINE CURRENT PIXEL PROP//////////////////////////
     //Wall Pixel?
-    assign wall_on <= ((x_wall_L <= x) && (x <= x_wall_R)) ? 1 : 0;  
+    assign wall_on = ((x_wall_L <= x) && (x <= x_wall_R)) ? 1 : 0;  
 
     //Paddle Pixel?
-    assign paddle_on <= (x_paddle_L <= x) && (x <= x_paddle_R) && (y_paddle_t <= y) && (y <= y_paddle_b) ? 1 : 0;
+    assign paddle_on = (x_paddle_L <= x) && (x <= x_paddle_R) && (y_paddle_t <= y) && (y <= y_paddle_b) ? 1 : 0;
 
     //Ball Pixel?
     assign ball_craft = (x_ball_l <= x) && (x <= x_ball_r) && (y_ball_t <= y) && (y <= y_ball_b); //Ball Boundaries
@@ -158,10 +160,10 @@ module pixel(
     //////////////////////////LOGIC TO ASSIGN RGB COLOR///////////////////////////////////
     //Colors - in BGR order, not RGB
     wire [11:0] wall_rgb, pad_rgb, ball_rgb, bg_rgb;
-    assign wall_rgb <= 12'h111;      // black wall
-    assign pad_rgb <= 12'h111;       // black paddle
-    assign ball_rgb <= 12'h1FF;      // yellow ball
-    assign bg_rgb <= 12'hCCC;        // gray background
+    assign wall_rgb = 12'h111;      // black wall
+    assign pad_rgb = 12'h111;       // black paddle
+    assign ball_rgb = 12'h1FF;      // yellow ball
+    assign bg_rgb = 12'hCCC;        // gray background
 
     always @* begin
         if(~video_on) begin
