@@ -37,7 +37,6 @@ module pixel(
     reg [11:0] shape;             // data at current rom address (12-bit 12 columns)
     wire ball_bit;                   // shows when rom data is 1 or 0 for ball rgb control
     wire wall_on, paddle_on, ball_craft, ball_on;
-    wire [11:0] wall_rgb, pad_rgb, ball_rgb, bg_rgb;
     reg reset_ball; // responsible for setting the ball when game over
    
    reg [30:0] endgame_counter;
@@ -46,9 +45,10 @@ module pixel(
     //parameter DELAY_CYCLES = 500_000_000; // 5 seconds delay (100 MHz clock)
     //reg delay_active;
     reg [10:0] collision_counter;
-    
+
+    ////////////////////////////LOGIC TO SET PROP PROPERTIES///////////////////////////////
     always @(posedge clk or posedge reset)begin
-        if(reset) begin
+        if(reset) begin                            //If reset, set the positions, speeds and counters to zero
             y_paddle_reg <= 0;
             x_ball_reg <= 0;
             y_ball_reg <= 0;
@@ -56,17 +56,16 @@ module pixel(
             y_delta_reg <= 10'h002;
             endgame_counter <= 0;
             collision_counter <= 0;
-
-        end
-        
-        else 
-        begin
+        end  
+        else begin                                 //If not reset, set positions, speeds, and counter to next logic
             y_paddle_reg <= y_paddle_next;
             x_ball_reg <= x_ball_next;
             y_ball_reg <= y_ball_next;
             x_delta_reg <= x_delta_next;
             y_delta_reg <= y_delta_next;
         end
+    end
+    ////////////////////////////////////////////////////////////////////////////////////////
         
         /*else if (reset_ball)
         begin
@@ -103,8 +102,9 @@ module pixel(
                 y_delta_reg <= y_delta_next;
             end
         end*/
-    end
-    always @*
+
+
+    always @* begin
         case(address)
             4'b0000 : shape = 12'b000000000001;  
             4'b0001 : shape = 12'b000000000011; 
@@ -120,12 +120,7 @@ module pixel(
             default : shape = 12'b000000000000;
         endcase
     
-    assign wall_on = ((x_wall_L <= x) && (x <= x_wall_R)) ? 1 : 0;
-    //colors - in BGR order, not RGB
-    assign wall_rgb = 12'h111;      // black wall
-    assign pad_rgb = 12'h111;       // black paddle
-    assign ball_rgb = 12'h1FF;      // yellow ball
-    assign bg_rgb = 12'hCCC;       // gray background
+
     
     // paddle 
     assign y_paddle_t = y_paddle_reg;                             // paddle top position
@@ -195,19 +190,44 @@ module pixel(
                 x_delta_next = ball_velocity_neg;        
                 collision_counter = collision_counter + 1;
             end */       
-    end                    
+    end     
+
+    ///////////////////////LOGIC TO DETERMINE CURRENT PIXEL PROP/////////////////////
+    //Wall Pixel?
+    assign wall_on = ((x_wall_L <= x) && (x <= x_wall_R)) ? 1 : 0;  
+
+    //Paddle Pixel?
+
+    //Ball Pixel?
+
+    //Background Pixel?
     
-    always @*
-        if(~video_on)
-            rgb = 12'h000;      // no value
-        else
+    
+    /////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////LOGIC TO ASSIGN RGB COLOR//////////////////////////////
+    //Colors - in BGR order, not RGB
+    wire [11:0] wall_rgb, pad_rgb, ball_rgb, bg_rgb;
+    assign wall_rgb = 12'h111;      // black wall
+    assign pad_rgb = 12'h111;       // black paddle
+    assign ball_rgb = 12'h1FF;      // yellow ball
+    assign bg_rgb = 12'hCCC;        // gray background
+
+    always @* begin
+        if(~video_on) begin
+            rgb = 12'h000;          // no value
+        end
+        else begin
             if(wall_on)
                 rgb = wall_rgb;     // wall color
-    else if(paddle_on)
+            else if(paddle_on)
                 rgb = pad_rgb;      // paddle color
             else if(ball_on)
                 rgb = ball_rgb;     // ball color
             else
                 rgb = bg_rgb;       // background
+        end
+    end
+    //////////////////////////////////////////////////////////////////////////////////
                   
 endmodule
