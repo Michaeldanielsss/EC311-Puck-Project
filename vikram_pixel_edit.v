@@ -114,8 +114,8 @@ module pixel(
         y_delta_next = y_delta_reg;
 
         //Change Speed Constant
-        ball_velocity_pos = ;
-        ball_velocity_neg = ;
+        ball_velocity_pos = (collision_counter / 3) + 1;
+        ball_velocity_neg = ball_velocity_pos * (-1);
         
         //Change Pixel Velocity
         if(x_paddle_R <= x_ball_r)                                  // collides with right screen
