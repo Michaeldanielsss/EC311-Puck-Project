@@ -9,6 +9,7 @@ module pixel(
     input [9:0] x,
     input [9:0] y,
     output reg [11:0] rgb
+    output reg [15:0] score_keep
     );
     
     parameter x_MAX = 639;
