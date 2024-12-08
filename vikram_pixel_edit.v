@@ -128,10 +128,14 @@ module pixel(
         x_delta_next = x_delta_reg;
         y_delta_next = y_delta_reg;
 
+        //Change Speed Constant
+        
+        
+        //Change Pixel Velocity
         if(x_paddle_R <= x_ball_r)                                  // collides with right screen
             reset_ball = 1;                                         // reset prop positions
-            x_delta_next <= 10'h002;                                // reset ball velocity
-            y_delta_next <= 10'h002;                                // reset ball velocity
+            x_delta_next = 10'h002;                                 // reset ball velocity
+            y_delta_next = 10'h002;                                 // reset ball velocity
             collision_counter = 0;                                  // reset collisions 
         else if(y_ball_t < 1)                                       // collide with top
             y_delta_next = ball_velocity_pos;                       // move down     
