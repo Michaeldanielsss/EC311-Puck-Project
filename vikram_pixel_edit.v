@@ -39,12 +39,6 @@ module pixel(
     wire ball_bit;                   // shows when rom data is 1 or 0 for ball rgb control
     wire wall_on, paddle_on, ball_craft, ball_on;
     reg reset_ball; // responsible for setting the ball when game over
-   
-   reg [30:0] endgame_counter;
-       // Add a delay counter for 5 seconds (assuming 100MHz clock)
-    //reg [31:0] delay_counter;
-    //parameter DELAY_CYCLES = 500_000_000; // 5 seconds delay (100 MHz clock)
-    //reg delay_active;
 
     ////////////////////////////LOGIC TO SET REGISTER PROPERTIES///////////////////////////////
     always @(posedge clk or posedge reset)begin
@@ -83,16 +77,7 @@ module pixel(
             y_delta_reg <= y_delta_reg + 10'h002; // Increase speed by 1 (to simulate 0.5 increment)
             end 
    
-        
-            else begin
-            endgame_counter <= 0;
-                y_paddle_reg <= y_paddle_next;
-                x_ball_reg <= x_ball_next;
-                y_ball_reg <= y_ball_next;
-                x_delta_reg <= x_delta_next;
-                y_delta_reg <= y_delta_next;
-            end
-        end*/
+    */
 
     ///////////////////////////BALL PROPERTIES////////////////////////////////////////////////
     //Current Ball Properties
@@ -129,7 +114,8 @@ module pixel(
         y_delta_next = y_delta_reg;
 
         //Change Speed Constant
-        
+        ball_velocity_pos = ;
+        ball_velocity_neg = ;
         
         //Change Pixel Velocity
         if(x_paddle_R <= x_ball_r)                                  // collides with right screen
