@@ -10,7 +10,7 @@ module pixel(
     input [9:0] x,
     input [9:0] y,
     output reg [11:0] rgb,
-    output [:] collision_counter
+    output reg [15:0] collision_counter
     );
     
     parameter x_MAX = 639;
@@ -45,7 +45,6 @@ module pixel(
     //reg [31:0] delay_counter;
     //parameter DELAY_CYCLES = 500_000_000; // 5 seconds delay (100 MHz clock)
     //reg delay_active;
-    reg [10:0] collision_counter;
 
     ////////////////////////////LOGIC TO SET REGISTER PROPERTIES///////////////////////////////
     always @(posedge clk or posedge reset)begin
