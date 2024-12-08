@@ -8,7 +8,8 @@ module pixel(
     input video_on,
     input [9:0] x,
     input [9:0] y,
-    output reg [11:0] rgb
+    output reg [11:0] rgb,
+    output reg [15:0] score_keep
     );
     
     parameter X_MAX = 639;
@@ -34,8 +35,8 @@ module pixel(
     wire [9:0] y_ball_next, x_ball_next; //reg buffer
     reg signed [9:0] x_delta_reg, x_delta_next; // signed for proper negative arithmetic
     reg signed [9:0] y_delta_reg, y_delta_next; // signed as well
-    parameter signed BALL_VELOCITY_POS = 1;  
-    parameter signed BALL_VELOCITY_NEG = -1;
+    parameter signed BALL_VELOCITY_POS = 2;  
+    parameter signed BALL_VELOCITY_NEG = -2;
     wire [3:0] address, ball_col;   // 4-bit rom address and rom column
     reg [11:0] shape;             // data at current rom address (12-bit for 12 columns)
     wire ball_bit;                   // signify when rom data is 1 or 0 for ball rgb control
@@ -48,6 +49,7 @@ module pixel(
             x_delta_reg <= 10'h002;
             y_delta_reg <= 10'h002;
             speed_count <= 0;  // Reset speed count
+            score_keep <= 16'b0000000000000000;
         end
         else begin
             y_pad_reg <= y_pad_next;
@@ -59,10 +61,12 @@ module pixel(
         if ((X_PAD_L <= x_ball_r) && (x_ball_r <= X_PAD_R) &&
             (y_pad_t <= y_ball_b) && (y_ball_t <= y_pad_b) && (x_delta_reg > 0)) begin
             speed_count <= speed_count + 1;
+                            score_keep <= score_keep + 16'b0000000000000001;
         end
         if (x_ball_r >= X_MAX) begin
             // Collision with right wall
             speed_count <= 0; // reset to the initial speed
+            score_keep <= 16'b0000000000000000;
         end
     end
     
@@ -164,6 +168,7 @@ module pixel(
             // collide with paddle
             if (x_delta_reg > 0) begin
                 x_delta_next = -(x_delta_reg + speed_count);
+
             end 
             // vertical speed unchanged
             y_delta_next = y_delta_reg;
