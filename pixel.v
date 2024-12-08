@@ -86,19 +86,7 @@ module pixel(
             4'b1010 : shape = 12'b000111111000;
             default : shape = 12'b000000000000;
         endcase
-        /*
-           *
-          **
-         ***
-       *****
-************
-       *****
-         ***
-          **
-           *
-           *
-           *
-        */
+
     
     wire wall_on, pad_on, sq_ball_on, ball_on;
     wire [11:0] wall_rgb, pad_rgb, ball_rgb, bg_rgb;
