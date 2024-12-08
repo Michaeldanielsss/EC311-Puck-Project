@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module pong(
+module puck(
     input clk,       
     input reset,            
     input up,               
