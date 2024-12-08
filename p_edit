@@ -46,7 +46,7 @@ module pixel(
     //reg delay_active;
     reg [10:0] collision_counter;
 
-    ////////////////////////////LOGIC TO SET REGISTER PROPERTIES////////////////////////////
+    ////////////////////////////LOGIC TO SET REGISTER PROPERTIES///////////////////////////////
     always @(posedge clk or posedge reset)begin
         if(reset) begin                            //If reset, set the positions, speeds and counters to zero
             y_paddle_reg <= 0;
@@ -65,7 +65,7 @@ module pixel(
             y_delta_reg <= y_delta_next;
         end
     end
-    ////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
         
         /*else if (reset_ball)
         begin
@@ -103,7 +103,7 @@ module pixel(
             end
         end*/
 
-    ///////////////////////////BALL PROPERTIES/////////////////////////////////////////////
+    ///////////////////////////BALL PROPERTIES////////////////////////////////////////////////
     //Current Ball Properties
     assign x_ball_l = x_ball_reg;    
     assign y_ball_t = y_ball_reg;
@@ -154,29 +154,23 @@ module pixel(
     assign y_ball_next = (refresh_tick) ? y_ball_reg + y_delta_reg : y_ball_reg;
     ///////////////////////////////////////////////////////////////////////////////////////
 
-    
-    // paddle 
+    //////////////////////////PADDLE PROPERTIES////////////////////////////////////////////
+    //Current Paddle Properties
     assign y_paddle_t = y_paddle_reg;                             // paddle top position
-    assign y_paddle_b = y_paddle_t + paddle_height - 1;              // paddle bottom position
-                    
+    assign y_paddle_b = y_paddle_t + paddle_height - 1;           // paddle bottom position
+
+    //Update and Set the Next Paddle Properties
     always @* begin
-        y_paddle_next = y_paddle_reg;     // no move
+        y_paddle_next = y_paddle_reg;                            // no move
         if(refresh_tick)
             if(up & (y_paddle_t > paddle_velocity))
                 y_paddle_next = y_paddle_reg - paddle_velocity;  // paddle up
         else if(down & (y_paddle_b < (y_MAX - paddle_velocity)))
                 y_paddle_next = y_paddle_reg + paddle_velocity;  // paddle down
     end
-    
-    
-    /*
-    assign x_ball_l = 100;
-    assign y_ball_t = 100;
-    assign x_ball_r = x_ball_l + ball_size - 1;
-    assign y_ball_b = y_ball_t + ball_size - 1;
-    */   
+    //////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////LOGIC TO DETERMINE CURRENT PIXEL PROP/////////////////////
+    ///////////////////////LOGIC TO DETERMINE CURRENT PIXEL PROP//////////////////////////
     //Wall Pixel?
     assign wall_on <= ((x_wall_L <= x) && (x <= x_wall_R)) ? 1 : 0;  
 
@@ -187,14 +181,9 @@ module pixel(
     assign ball_craft = (x_ball_l <= x) && (x <= x_ball_r) && (y_ball_t <= y) && (y <= y_ball_b); //Ball Boundaries
     assign ball_bit = shape[ball_col];                                                            //Ball Shape
     assign ball_on = ball_craft & ball_bit;                                                       //Ball Total
+    //////////////////////////////////////////////////////////////////////////////////////
 
-    //Background Pixel?
-    
-    
-    
-    /////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////LOGIC TO ASSIGN RGB COLOR//////////////////////////////
+    //////////////////////////LOGIC TO ASSIGN RGB COLOR///////////////////////////////////
     //Colors - in BGR order, not RGB
     wire [11:0] wall_rgb, pad_rgb, ball_rgb, bg_rgb;
     assign wall_rgb <= 12'h111;      // black wall
@@ -217,6 +206,6 @@ module pixel(
                 rgb = bg_rgb;       // background
         end
     end
-    //////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////
                   
 endmodule
