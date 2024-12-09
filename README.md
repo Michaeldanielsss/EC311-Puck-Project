@@ -8,4 +8,4 @@ Overview: For our project we created a VGA game using verilog code to make a sin
 
 How to Run: Upload and program our simulation and contrainsts files onto your FPGA and display the FPGA on your monitor. Next, use the up and down buttons to start moving your paddle and you will see your score displayed in bits on the FPGA.
 
-Overview of code: There are 5 code files: Pixel, Debouncer, VGA Controller, and puck.
+Overview of code: There are 5 code files: Pixel, Debouncer, VGA Controller, and Pong.
