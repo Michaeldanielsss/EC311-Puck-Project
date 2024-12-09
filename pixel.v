@@ -61,10 +61,10 @@ module pixel(
             x_delta_reg <= x_delta_next;
             y_delta_reg <= y_delta_next;
             // Increase speed_count upon paddle collision
-            if ((X_PAD_L <= x_ball_r) && (x_ball_r <= X_PAD_R) &&
-                (y_pad_t <= y_ball_b) && (y_ball_t <= y_pad_b) && (x_delta_reg > 0)) begin
+            if ((x_paddle_L <= x_ball_r) && (x_ball_r <= x_paddle_R) &&
+                (y_paddle_t <= y_ball_b) && (y_ball_t <= y_paddle_b)) begin
                 speed_count <= speed_count + 1;
-                                score_keep <= score_keep + 16'b0000000000000001;
+                score_keep <= score_keep + 16'b0000000000000001;
             end
             if (x_ball_r >= x_MAX) begin
                 // Collision with right wall
