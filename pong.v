@@ -11,23 +11,23 @@ module pong(
     output [15:0] score
     );
     
-    wire w_reset, w_up, w_down, w_vid_on, w_pixel;
-    wire [9:0] w_x, w_y;
+    wire wire_reset, w_up, w_down, w_vid_on, wire_pixel;
+    wire [9:0] wire_x, wire_y;
     reg [11:0] reg_rgb;
-    wire [11:0] w_rgb;
-    wire [15:0] w_score;
+    wire [11:0] wire_rgb;
+    wire [15:0] wire_score;
     
-    vga_controller vga(.clk(clk), .reset(w_reset), .video_on(w_vid_on), .hsync(hsync), .vsync(vsync), .p_pixel(w_pixel), .x(w_x), .y(w_y));
-    pixel pix(.clk(clk), .reset(w_reset), .up(w_up), .down(w_down), .video_on(w_vid_on), .x(w_x), .y(w_y), .rgb(w_rgb), .score_keep(w_score));
-    debouncer dbright(.clk(clk), .button(reset), .clean(w_reset));
+    vga_controller vga(.clk(clk), .reset(wire_reset), .video_on(w_vid_on), .hsync(hsync), .vsync(vsync), .p_pixel(wire_pixel), .x(wire_x), .y(wire_y));
+    pixel pix(.clk(clk), .reset(wire_reset), .up(w_up), .down(w_down), .video_on(w_vid_on), .x(wire_x), .y(wire_y), .rgb(wire_rgb), .score_keep(wire_score));
+    debouncer dbright(.clk(clk), .button(reset), .clean(wire_reset));
     debouncer dbup(.clk(clk), .button(up), .clean(w_up));
     debouncer dbdown(.clk(clk), .button(down), .clean(w_down));
     
     always @(posedge clk)
-        if(w_pixel)
-            reg_rgb <= w_rgb;
+        if(wire_pixel)
+            reg_rgb <= wire_rgb;
             
     assign rgb = reg_rgb;
-    assign score = w_score;
+    assign score = wire_score;
     
 endmodule
