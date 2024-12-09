@@ -14,13 +14,10 @@ module pixel(
     
     parameter X_MAX = 639;
     parameter Y_MAX = 479;
-    
     wire frame_refresh;
     assign frame_refresh = ((y == 481) && (x == 0)) ? 1 : 0; 
-
     parameter WALL_LEFT = 77;    
     parameter WALL_RIGHT = 84; 
-
     parameter PADDLE_LEFT = 620;
     parameter PADDLE_RIGHT = 624;    
     wire [9:0] paddle_top, paddle_bottom;
