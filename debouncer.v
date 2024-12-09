@@ -5,16 +5,16 @@ module debouncer(
     input button, clk
     );
     
- reg [2:0]counter;
+ reg [2:0]count_val;
 
-    wire MAX = &counter;
+    wire max_val = &count_val;
     
     always @ (posedge clk)
         begin
             if (button == clean)
-                counter <= 0;
+                count_val <= 0;
             else 
-                counter <= counter + 4'd1;
-                if (MAX) clean <= button;
+                count_val <= count_val + 4'd1;
+                if (max_val) clean <= button;
         end    
 endmodule
